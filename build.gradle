@@ -19,6 +19,10 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven{
+            url "https://dl.bintray.com/15191851980/maven"
+//            url uri('D:/repos')
+        }
     }
 
     //添加 utf-8 的支持，避免中文注释生成 Javadoc 文件出现编码错误

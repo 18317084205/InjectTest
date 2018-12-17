@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:support-annotations:27.1.1'
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
+apply from: rootProject.file('bintray.gradle')
