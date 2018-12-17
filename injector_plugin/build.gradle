@@ -1,0 +1,15 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+dependencies {
+    compile gradleApi() //gradle sdk
+    compile localGroovy() //Injector sdk
+    compile 'com.android.tools.build:gradle:3.2.1'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+apply from: rootProject.file('bintray.gradle')

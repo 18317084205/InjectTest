@@ -4,7 +4,7 @@ publish {
     groupId = GROUPID
     artifactId = ARTIFACTID
     publishVersion = versions
-    desc = 'Inject library for Android'
+    desc = DESC
     website = 'https://github.com/18317084205/InjectTest'
     bintrayUser = BINTRAY_USER
     userOrg = BINTRAY_USER
