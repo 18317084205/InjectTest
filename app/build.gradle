@@ -27,4 +27,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':injector_lib')
     annotationProcessor project(':injector_complier')
+
+//    implementation 'org.liang:injector:1.0.1'
+//    implementation 'org.liang:injector_annotations:1.0.1'
+//    annotationProcessor 'org.liang:injector_complier:1.0.1'
 }
