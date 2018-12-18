@@ -9,7 +9,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/inject_lib" />
+            <option value="$PROJECT_DIR$/injector_annotations" />
+            <option value="$PROJECT_DIR$/injector_complier" />
+            <option value="$PROJECT_DIR$/injector_lib" />
+            <option value="$PROJECT_DIR$/injector_plugin" />
+            <option value="$PROJECT_DIR$/librarytest" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

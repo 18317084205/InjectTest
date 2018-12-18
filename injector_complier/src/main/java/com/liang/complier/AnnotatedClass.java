@@ -7,6 +7,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class AnnotatedClass {
         this.typeElement = typeElement;
         this.elements = elements;
         listenerClassListMap = new HashMap<>();
-        parameterName = toLowerCaseFirstOne(typeElement.getSimpleName() + "");
+        parameterName = StringUtils.capitalize(typeElement.getSimpleName() + "");
     }
 
     public void addElement(ListenerClass listenerClass, MethodViewBinding viewBinding) {
@@ -232,13 +233,6 @@ public class AnnotatedClass {
             builder.addAnnotation(Override.class);
         }
         return builder;
-    }
-
-    private String toLowerCaseFirstOne(String s) {
-        if (Character.isLowerCase(s.charAt(0))) {
-            return s;
-        }
-        return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
     }
 
 }

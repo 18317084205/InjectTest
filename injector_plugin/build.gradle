@@ -12,4 +12,15 @@ repositories {
     mavenCentral()
 }
 
+group = GROUPID
+version = "1.0.8"
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('D:/repos'))
+        }
+    }
+}
+
 apply from: rootProject.file('bintray.gradle')

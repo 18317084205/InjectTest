@@ -1,1 +1,1 @@
-include ':app', ':injector_lib', ':injector_annotations', ':injector_complier', ':injector_plugin'
+include ':app', ':injector_lib', ':injector_annotations', ':injector_complier', ':injector_plugin', ':librarytest'
