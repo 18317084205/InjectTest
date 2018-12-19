@@ -1,8 +1,6 @@
 package com.liang.inject;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 import android.view.View;
 
@@ -15,12 +13,11 @@ public class JInjector {
 
     static final String TAG = JInjector.class.getSimpleName();
     static final String INJECTOR = "$$Injector";
-    @VisibleForTesting
     static final Map<Class<?>, Constructor<? extends UnBinder>> BINDINGS = new LinkedHashMap<>();
 
-    public static UnBinder bind(@NonNull Activity target) {
-        View sourceView = target.getWindow().getDecorView(); //获取devoreView
-        return createBinding(target, sourceView); //执行绑定操作
+    public static UnBinder bind(Activity activity) {
+        View sourceView = activity.getWindow().getDecorView(); //获取devoreView
+        return createBinding(activity, sourceView); //执行绑定操作
     }
 
     private static UnBinder createBinding(Activity target, View sourceView) {

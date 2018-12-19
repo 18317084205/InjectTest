@@ -3,26 +3,23 @@ package com.liang.plugin.Injector
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
+import com.sun.xml.internal.ws.util.StringUtils
 
 import javax.lang.model.element.Modifier
+import java.lang.reflect.Type
 
 class FinalRClassBuilder {
 
-    final annotation_package = "androidx.annotation"
-    final annotation_package_legacy = "android.support.annotation"
-    final supported_types = ["anim", "array", "attr", "bool", "color", "dimen",
-                                         "drawable", "id", "integer", "layout", "menu", "plurals", "string", "style", "styleable"]
-    private def packageName
-    private def className
-    private def useLegacyTypes
-    private def resourceTypes = new HashMap<String, TypeSpec.Builder>();
+    final annotation_package = "android.support.annotation"
+    static final supported_types = ["id"]
+    def packageName
+    def className
+    def resourceTypes = new HashMap<String, TypeSpec.Builder>();
 
-    FinalRClassBuilder(packageName, className, useLegacyTypes) {
+    FinalRClassBuilder(String packageName,String className) {
         this.packageName = packageName
         this.className = className
-        this.useLegacyTypes = useLegacyTypes
     }
 
     JavaFile build() {
@@ -41,21 +38,29 @@ class FinalRClassBuilder {
                 .build()
     }
 
-    void addResourceField(type, fieldName, fieldValue) {
+    void addResourceField(String type, String fieldName, String fieldValue) {
         if (!type in supported_types) {
             return
         }
 
-        fieldSpecBuilder = FieldSpec.builder(TypeName.INT, fieldName)
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer(fieldValue)
+        Modifier[] modifiers = [Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL]
+        FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder((Type)Integer.TYPE, fieldName, new Modifier[0])
+                .addModifiers(modifiers)
+                .initializer(fieldValue, new Object[0])
 
         fieldSpecBuilder.addAnnotation(getSupportAnnotationClass(type))
+        TypeSpec.Builder builder = resourceTypes.get(type)
+        if (builder == null) {
+            builder = TypeSpec.classBuilder(type).addModifiers(modifiers)
+            resourceTypes.put(type, builder)
+        }
+
+        builder.addField(fieldSpecBuilder.build())
+
     }
 
-    ClassName getSupportAnnotationClass(type) {
-        supportPackage = useLegacyTypes ? annotation_package_legacy : annotation_package
-        return ClassName.get(supportPackage, type.capitalize() + "Res")
+    ClassName getSupportAnnotationClass(String type) {
+        return ClassName.get(annotation_package, StringUtils.capitalize(type) + "Res",new String[0])
     }
 
 }

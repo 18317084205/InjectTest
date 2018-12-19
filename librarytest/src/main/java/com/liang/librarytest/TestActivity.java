@@ -22,7 +22,7 @@ import com.liang.inject.JInjector;
 
 public class TestActivity extends AppCompatActivity {
 
-//    @BindView(R.id.button)
+    @BindView(R2.id.button)
     Button button;
 
 //    @BindView(R.id.imageView)

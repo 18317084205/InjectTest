@@ -7,7 +7,6 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class AnnotatedClass {
         this.typeElement = typeElement;
         this.elements = elements;
         listenerClassListMap = new HashMap<>();
-        parameterName = StringUtils.capitalize(typeElement.getSimpleName() + "");
+        parameterName = capitalize(typeElement.getSimpleName() + "");
     }
 
     public void addElement(ListenerClass listenerClass, MethodViewBinding viewBinding) {
@@ -104,6 +103,10 @@ public class AnnotatedClass {
                 }
                 continue;
             }
+        }
+
+        if (!isViewListener) {
+            return;
         }
         createUnBingMethodCode(methodSpec);
     }
@@ -235,4 +238,13 @@ public class AnnotatedClass {
         return builder;
     }
 
+    private  String capitalize(String string) {
+        if (string != null && string.length() != 0) {
+            char[] chars = string.toCharArray();
+            chars[0] = Character.toUpperCase(chars[0]);
+            return new String(chars);
+        } else {
+            return string;
+        }
+    }
 }
