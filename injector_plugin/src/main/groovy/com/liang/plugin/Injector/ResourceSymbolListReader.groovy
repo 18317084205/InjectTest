@@ -31,7 +31,7 @@ class ResourceSymbolListReader {
             def javaType = values[0]
             def symbolType = values[1]
             def fieldName = values[2]
-            def fieldValue = "R.id.$fieldName"
+            def fieldValue = values[3]
             if (javaType == "int" && symbolType in FinalRClassBuilder.supported_types) {
                 print("processLine ... symbolType:$symbolType" + "... fieldName:$fieldName"
                         + "... fieldValue:$fieldValue\n")

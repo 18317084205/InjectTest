@@ -9,6 +9,7 @@ import com.liang.annotations.OnEditorAction;
 import com.liang.annotations.OnLongClick;
 import com.liang.annotations.OnTextChanged;
 import com.squareup.javapoet.TypeName;
+import com.sun.source.util.Trees;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -40,14 +41,20 @@ public class InjectorProcessor extends AbstractProcessor {
     private Elements elements; //元素相关的辅助类
     private Messager messager; //日志相关的辅助类
     private Map<String, AnnotatedClass> annotatedClassMap;
+    Trees trees;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
-        filer = processingEnv.getFiler();
-        elements = processingEnv.getElementUtils();
-        messager = processingEnv.getMessager();
+        filer = processingEnvironment.getFiler();
+        elements = processingEnvironment.getElementUtils();
+        messager = processingEnvironment.getMessager();
         annotatedClassMap = new TreeMap<>();
+
+        try {
+            trees = Trees.instance(processingEnvironment);
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
     @Override
@@ -66,13 +73,10 @@ public class InjectorProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        log("InjectorProcessor: %s", "process...");
         annotatedClassMap.clear();
-
         for (Class<? extends Annotation> annotation : Containers.getSupportedAnnotations()) {
             process(roundEnvironment, annotation);
         }
-
         for (AnnotatedClass annotatedClass : annotatedClassMap.values()) {
             try {
                 annotatedClass.generateActivityFile().writeTo(filer);
@@ -88,38 +92,39 @@ public class InjectorProcessor extends AbstractProcessor {
             AnnotatedClass annotatedClass = getAnnotatedClass(element);
             ListenerClass listener = clazz.getAnnotation(ListenerClass.class);
             Annotation annotation = element.getAnnotation(clazz);
-            int[] ids = {-1};
+
+            List<String> resIds = null;
             if (annotation instanceof BindView) {
-                ids = ((BindView) annotation).value();
+                resIds = Containers.elementToIdRes(trees, element, BindView.class, ((BindView) annotation).value());
             }
             if (annotation instanceof OnClick) {
-                ids = ((OnClick) annotation).value();
+                resIds = Containers.elementToIdRes(trees, element, OnClick.class, ((OnClick) annotation).value());
             }
             if (annotation instanceof OnLongClick) {
-                ids = ((OnLongClick) annotation).value();
+                resIds = Containers.elementToIdRes(trees, element, OnLongClick.class, ((OnLongClick) annotation).value());
             }
             if (annotation instanceof OnCheckedChanged) {
-                ids = ((OnCheckedChanged) annotation).value();
+                resIds = Containers.elementToIdRes(trees, element, OnCheckedChanged.class, ((OnCheckedChanged) annotation).value());
             }
             if (annotation instanceof OnEditorAction) {
-                ids = ((OnEditorAction) annotation).value();
+                resIds = Containers.elementToIdRes(trees, element, OnEditorAction.class, ((OnEditorAction) annotation).value());
             }
             if (annotation instanceof OnTextChanged) {
-                ids = ((OnTextChanged) annotation).value();
+                resIds = Containers.elementToIdRes(trees, element, OnTextChanged.class, ((OnTextChanged) annotation).value());
+            }
+
+            if (resIds.isEmpty()) {
+                throw new RuntimeException("View`s id is null");
             }
 
             if (listener != null) {
-                MethodViewBinding viewBinding = new MethodViewBinding(element.getSimpleName().toString(), ids, listener.setter());
+                MethodViewBinding viewBinding = new MethodViewBinding(element.getSimpleName().toString(), resIds, listener.setter());
                 if (element.getKind() == ElementKind.METHOD && element instanceof ExecutableElement) {
-                    log("parameterTypeName  getKind: %s", element.getKind().name());
                     List<? extends VariableElement> methodParameters = ((ExecutableElement) element).getParameters();
                     if (!methodParameters.isEmpty() && methodParameters.size() <= listener.parameters().length) {
-                        log("parameterTypeName  methodParameters: %s", methodParameters.size());
                         VariableElement variableElement = methodParameters.get(0);
                         TypeMirror parameterType = variableElement.asType();
-                        log("parameterTypeName parameterType: %s", parameterType.toString());
                         TypeName parameterTypeName = TypeName.get(parameterType);
-                        log("parameterTypeName parameterTypeName: %s", parameterTypeName.toString());
                         viewBinding.setViewTypeName(parameterTypeName);
                     }
                 }

@@ -17,7 +17,7 @@ import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 
 class Injector implements Plugin<Project> {
-    def versions = "1.0.2"
+    def versions = "1.0.3"
     @Override
     void apply(Project project) {
 
@@ -42,7 +42,7 @@ class Injector implements Plugin<Project> {
         project.dependencies {
             implementation "org.liang:injector:${versions}"
             implementation "org.liang:injector_annotations:${versions}"
-//            annotationProcessor "org.liang:injector_complier:${versions}"
+            annotationProcessor "org.liang:injector_complier:${versions}"
         }
     }
 

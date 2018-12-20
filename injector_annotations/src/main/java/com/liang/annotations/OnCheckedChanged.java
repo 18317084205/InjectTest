@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
         }
 )
 public @interface OnCheckedChanged {
-    @IdRes int[] value() default {-1};
+    @IdRes int[] value() default {};
 }

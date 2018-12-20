@@ -21,5 +21,5 @@ import java.lang.annotation.Target;
         }
 )
 public @interface OnTextChanged {
-    @IdRes int[] value() default {-1};
+    @IdRes int[] value() default {};
 }

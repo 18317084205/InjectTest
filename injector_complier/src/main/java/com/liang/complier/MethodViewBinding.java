@@ -2,14 +2,18 @@ package com.liang.complier;
 
 import com.squareup.javapoet.TypeName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MethodViewBinding {
     private final String name;
-    private final int[] resIds;
+    private final List<String> resIds = new ArrayList<>();
     private final String setter;
     private TypeName viewTypeName;
-    public MethodViewBinding(String name, int[] resIds, String setter) {
+    public MethodViewBinding(String name, List<String> resIds, String setter) {
         this.name = name;
-        this.resIds = resIds;
+        this.resIds.clear();
+        this.resIds.addAll(resIds);
         this.setter = setter;
     }
 
@@ -17,7 +21,7 @@ public class MethodViewBinding {
         return name;
     }
 
-    public int[] getIds() {
+    public List<String> getIds() {
         return resIds;
     }
 

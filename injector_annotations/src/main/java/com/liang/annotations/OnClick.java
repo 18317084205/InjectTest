@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
         parameters = "android.view.View"
 )
 public @interface OnClick {
-    @IdRes int[] value() default {-1};
+    @IdRes int[] value() default {};
 }

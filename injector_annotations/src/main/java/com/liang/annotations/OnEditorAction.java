@@ -21,5 +21,5 @@ import java.lang.annotation.Target;
         defaultReturn = "false"
 )
 public @interface OnEditorAction {
-    @IdRes int[] value() default {-1};
+    @IdRes int[] value() default {};
 }

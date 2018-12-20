@@ -8,10 +8,17 @@ import com.liang.annotations.OnLongClick;
 import com.liang.annotations.OnTextChanged;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
+import com.sun.source.util.Trees;
+import com.sun.tools.javac.tree.JCTree;
 
 import java.lang.annotation.Annotation;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.Element;
 
 public class Containers {
 
@@ -24,7 +31,7 @@ public class Containers {
     public static final String INJECTOR = "$$Injector";
     public static final String METHOD_UNBIND = "unbind";
     public static final String METHOD_SET_LISTENER = "setViewListener";
-
+    private static final ResTreeScanner RES_TREE_SCANNER = new ResTreeScanner();
 
     public static Set<Class<? extends Annotation>> getSupportedAnnotations() {
         Set<Class<? extends Annotation>> annotations = new LinkedHashSet<>();
@@ -60,5 +67,27 @@ public class Containers {
             default:
                 return ClassName.bestGuess(returnType);
         }
+    }
+
+    public static List<String> elementToIdRes(Trees trees, Element element,
+                                              Class<? extends Annotation> annotation, int[] values) {
+        RES_TREE_SCANNER.reset();
+        JCTree tree = (JCTree) trees.getTree(element, getMirror(element, annotation));
+        if (tree != null) {
+            tree.accept(RES_TREE_SCANNER);
+        } else {
+            RES_TREE_SCANNER.defResIds(values);
+        }
+        return RES_TREE_SCANNER.resourceIds;
+    }
+
+    private static AnnotationMirror getMirror(Element element,
+                                              Class<? extends Annotation> annotation) {
+        for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+            if (annotationMirror.getAnnotationType().toString().equals(annotation.getCanonicalName())) {
+                return annotationMirror;
+            }
+        }
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.liang.plugin.Injector
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.sun.xml.internal.ws.util.StringUtils
 
@@ -44,11 +45,11 @@ class FinalRClassBuilder {
         }
 
         Modifier[] modifiers = [Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL]
-        FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder((Type)Integer.TYPE, fieldName, new Modifier[0])
+        FieldSpec.Builder fieldSpecBuilder = FieldSpec.builder(TypeName.INT, fieldName)
                 .addModifiers(modifiers)
-                .initializer(fieldValue, new Object[0])
+                .initializer(fieldValue)
 
-        fieldSpecBuilder.addAnnotation(getSupportAnnotationClass(type))
+//        fieldSpecBuilder.addAnnotation(getSupportAnnotationClass(type))
         TypeSpec.Builder builder = resourceTypes.get(type)
         if (builder == null) {
             builder = TypeSpec.classBuilder(type).addModifiers(modifiers)

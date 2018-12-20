@@ -29,7 +29,7 @@ public class AnnotatedClass {
         this.typeElement = typeElement;
         this.elements = elements;
         listenerClassListMap = new HashMap<>();
-        parameterName = capitalize(typeElement.getSimpleName() + "");
+        parameterName = decimalize(typeElement.getSimpleName() + "");
     }
 
     public void addElement(ListenerClass listenerClass, MethodViewBinding viewBinding) {
@@ -90,7 +90,10 @@ public class AnnotatedClass {
     private CodeBlock.Builder createBingFieldCode(MethodViewBinding viewBinding) {
         CodeBlock.Builder builder = CodeBlock.builder()
                 .add("$L.$L = ", parameterName, viewBinding.getName());
-        builder.add("$T.findViewAsType(view,$L)", Containers.VIEW_UTILS, viewBinding.getIds()[0]);
+        for (String id : viewBinding.getIds()) {
+            builder.add("$T.findViewAsType(view,$L)", Containers.VIEW_UTILS, id);
+            break;
+        }
         return builder;
     }
 
@@ -160,52 +163,53 @@ public class AnnotatedClass {
     }
 
     private CodeBlock.Builder createListenerMethodCode(ListenerClass listenerClass, List<MethodViewBinding> methodViewBindings) {
-        CodeBlock.Builder builder = CodeBlock.builder().beginControlFlow("switch(v.getId())");
+        CodeBlock.Builder builder = CodeBlock.builder();
         String[] parameterTypes = listenerClass.parameters();
 
         for (MethodViewBinding viewBinding : methodViewBindings) {
-            for (int value : viewBinding.getIds()) {
-                builder.add("case $L:\n", value);
-            }
-            StringBuilder stringBuilder = new StringBuilder("$L.$L(");
-            int index = viewBinding.getViewParameterType() == null ? 1 : 0;
-            boolean hasCast = index == 0 && !viewBinding.getViewParameterType().toString().equals(Containers.VIEW.toString());
-            for (int i = 0; i < parameterTypes.length; i++) {
-                if (index == 1 && i == 0) {
-                    continue;
-                }
-                String parameter = parameterTypes[i];
-                stringBuilder.append(parameter.equals(Containers.VIEW.topLevelClassName().toString()) && index == 0 ?
-                        (viewBinding.getViewParameterType().toString().equals(Containers.VIEW.topLevelClassName().toString()) ?
-                                "v" : "($T)v") : " p" + i);
-                if (i < parameterTypes.length - 1) {
-                    stringBuilder.append(",");
-                }
-            }
-            stringBuilder.append(");");
+            StringBuilder methodBuilder = new StringBuilder("if(");
+            for (int i = 0; i < viewBinding.getIds().size(); i++) {
 
-            if (listenerClass.returnType().equals("void")) {
-                if (hasCast) {
-                    builder.add(stringBuilder.toString() + "\n", parameterName, viewBinding.getName(), viewBinding.getViewParameterType());
-                } else {
-                    builder.add(stringBuilder.toString() + "\n", parameterName, viewBinding.getName());
-                }
-                builder.add("break;\n");
-            } else {
-                if (hasCast) {
-                    builder.add("return " + stringBuilder.toString() + "\n", parameterName, viewBinding.getName(), viewBinding.getViewParameterType());
-                } else {
-                    builder.add("return " + stringBuilder.toString() + "\n", parameterName, viewBinding.getName());
-                }
 
+                builder.add("if(v.getId()==$L){\n", entry.getValue().isEmpty() ? entry.getKey() : entry.getValue());
+                StringBuilder stringBuilder = new StringBuilder("$L.$L(");
+                int index = viewBinding.getViewParameterType() == null ? 1 : 0;
+                boolean hasCast = index == 0 && !viewBinding.getViewParameterType().toString().equals(Containers.VIEW.toString());
+                for (int i = 0; i < parameterTypes.length; i++) {
+                    if (index == 1 && i == 0) {
+                        continue;
+                    }
+                    String parameter = parameterTypes[i];
+                    stringBuilder.append(parameter.equals(Containers.VIEW.topLevelClassName().toString()) && index == 0 ?
+                            (viewBinding.getViewParameterType().toString().equals(Containers.VIEW.topLevelClassName().toString()) ?
+                                    "v" : "($T)v") : " p" + i);
+                    if (i < parameterTypes.length - 1) {
+                        stringBuilder.append(",");
+                    }
+                }
+                stringBuilder.append(");");
+
+                if (listenerClass.returnType().equals("void")) {
+                    if (hasCast) {
+                        builder.add(stringBuilder.toString() + "\n", parameterName, viewBinding.getName(), viewBinding.getViewParameterType());
+                    } else {
+                        builder.add(stringBuilder.toString() + "\n", parameterName, viewBinding.getName());
+                    }
+                    builder.add("}");
+                } else {
+                    if (hasCast) {
+                        builder.add("return " + stringBuilder.toString() + "\n", parameterName, viewBinding.getName(), viewBinding.getViewParameterType());
+                    } else {
+                        builder.add("return " + stringBuilder.toString() + "\n", parameterName, viewBinding.getName());
+                    }
+                    builder.add("}");
+                }
             }
+
         }
 
         if (!listenerClass.returnType().equals("void")) {
-            builder.endControlFlow();
-            builder.add("return $L", listenerClass.defaultReturn());
-        } else {
-            builder.add("}");
+            builder.add("\nreturn $L", listenerClass.defaultReturn());
         }
 
         return builder;
@@ -213,9 +217,10 @@ public class AnnotatedClass {
 
     private void createBingListenerMethodCode(MethodSpec.Builder builder, List<MethodViewBinding> methodViewBindings) {
         for (MethodViewBinding viewBinding : methodViewBindings) {
-            for (int id : viewBinding.getIds()) {
+            for (Map.Entry<Integer, String> entry : viewBinding.getIds().entrySet()) {
                 if (!viewBinding.getSetter().isEmpty()) {
-                    builder.addStatement("$T.$L(view,$L,listener)", Containers.VIEW_UTILS, viewBinding.getSetter(), id);
+                    builder.addStatement("$T.$L(view,$L,listener)", Containers.VIEW_UTILS, viewBinding.getSetter(),
+                            entry.getValue().isEmpty() ? entry.getKey() : entry.getValue());
                 }
             }
         }
@@ -238,13 +243,13 @@ public class AnnotatedClass {
         return builder;
     }
 
-    private  String capitalize(String string) {
-        if (string != null && string.length() != 0) {
-            char[] chars = string.toCharArray();
-            chars[0] = Character.toUpperCase(chars[0]);
+    private String decimalize(String s) {
+        if (s != null && s.length() != 0) {
+            char[] chars = s.toCharArray();
+            chars[0] = Character.toLowerCase(chars[0]);
             return new String(chars);
         } else {
-            return string;
+            return s;
         }
     }
 }

@@ -17,5 +17,5 @@ import java.lang.annotation.Target;
         defaultReturn = "false"
 )
 public @interface OnLongClick {
-    @IdRes int[] value() default { -1 };
+    @IdRes int[] value() default {};
 }
