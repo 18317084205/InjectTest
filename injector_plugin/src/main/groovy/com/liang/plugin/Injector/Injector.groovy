@@ -17,7 +17,7 @@ import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 
 class Injector implements Plugin<Project> {
-    def versions = "1.0.3"
+    def versions = "1.0.4"
     @Override
     void apply(Project project) {
 

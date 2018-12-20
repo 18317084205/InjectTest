@@ -1,8 +1,8 @@
 package com.liang.injecttest;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -10,16 +10,15 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.liang.annotations.BindView;
 import com.liang.annotations.OnCheckedChanged;
-import com.liang.inject.JInjector;
 import com.liang.annotations.OnClick;
-
+import com.liang.annotations.OnEditorAction;
 import com.liang.annotations.OnLongClick;
 import com.liang.annotations.OnTextChanged;
-import com.liang.annotations.OnEditorAction;
+import com.liang.inject.JInjector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
 
-    Toast toast;
+    @BindView(R.id.textView_)
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,11 +104,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMsg(String msg) {
-        if (toast != null) {
-            toast.setText(msg);
-        } else {
-            toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        }
-        toast.show();
+        textView.setText(msg);
     }
 }
