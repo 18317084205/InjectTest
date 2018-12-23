@@ -6,7 +6,6 @@ import com.sun.tools.javac.tree.JCTree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ResTreeScanner extends com.sun.tools.javac.tree.TreeScanner {
     List<String> resourceIds = new ArrayList<>();
@@ -19,7 +18,7 @@ public class ResTreeScanner extends com.sun.tools.javac.tree.TreeScanner {
         }
         ClassName className = ClassName.get(symbol.packge().getQualifiedName().toString(), "R",
                 symbol.enclClass().name.toString());
-//        System.out.println("className........: " + className);
+        System.out.println("className........: " + className);
         resourceIds.add(className + "." + symbol.name.toString());
     }
 

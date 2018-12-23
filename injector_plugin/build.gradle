@@ -13,12 +13,12 @@ repositories {
 }
 
 group = GROUPID
-version = "1.0.3"
+version = "1.0.5"
 
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: uri('D:/repos'))
+            repository(url: uri('/Users/jianbo/repos'))
         }
     }
 }
