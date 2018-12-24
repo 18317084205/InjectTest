@@ -9,7 +9,7 @@ buildscript {
         jcenter()
         maven {
 //            url "https://dl.bintray.com/15191851980/maven"
-            url uri('/Users/jianbo/repos')
+            url uri('D:/repos')
         }
     }
     dependencies {

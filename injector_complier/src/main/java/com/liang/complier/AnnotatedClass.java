@@ -88,9 +88,9 @@ public class AnnotatedClass {
     }
 
     private CodeBlock.Builder createBingFieldCode(MethodViewBinding viewBinding) {
-        CodeBlock.Builder builder = CodeBlock.builder()
-                .add("$L.$L = ", parameterName, viewBinding.getName());
-        for (String id : viewBinding.getIds()) {
+        CodeBlock.Builder builder = CodeBlock.builder();
+        for (int id : viewBinding.getIds()) {
+            builder.add("$L.$L = ", parameterName, viewBinding.getName());
             builder.add("$T.findViewAsType(view,$L)", Containers.VIEW_UTILS, id);
             break;
         }
@@ -168,9 +168,9 @@ public class AnnotatedClass {
 
         for (MethodViewBinding viewBinding : methodViewBindings) {
             StringBuilder methodBuilder = new StringBuilder("if(");
-            List<String> ids = viewBinding.getIds();
-            for (int i = 0; i < ids.size(); i++) {
-                methodBuilder.append(i == 0 ? "v.getId()==" + ids.get(i) : "\n||v.getId()==" + ids.get(i));
+            int[] ids = viewBinding.getIds();
+            for (int i = 0; i < ids.length; i++) {
+                methodBuilder.append(i == 0 ? "v.getId()==" + ids[i] : "\n||v.getId()==" + ids[i]);
             }
             methodBuilder.append(")");
             builder.beginControlFlow(methodBuilder.toString());
@@ -217,7 +217,7 @@ public class AnnotatedClass {
 
     private void createBingListenerMethodCode(MethodSpec.Builder builder, List<MethodViewBinding> methodViewBindings) {
         for (MethodViewBinding viewBinding : methodViewBindings) {
-            for (String entry : viewBinding.getIds()) {
+            for (int entry : viewBinding.getIds()) {
                 if (!viewBinding.getSetter().isEmpty()) {
                     builder.addStatement("$T.$L(view,$L,listener)", Containers.VIEW_UTILS, viewBinding.getSetter(), entry);
                 }

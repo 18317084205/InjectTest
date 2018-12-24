@@ -1,6 +1,5 @@
 package com.liang.librarytest;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,10 +22,10 @@ import com.liang.inject.JInjector;
 
 public class TestActivity extends AppCompatActivity {
 
-    @BindView(R2.id.button)
+    @BindView(R.id.button)
     Button button;
 
-    @BindView(R2.id.imageView)
+    @BindView(R.id.imageView)
     ImageView imageView;
 
     Toast toast;
@@ -39,7 +38,7 @@ public class TestActivity extends AppCompatActivity {
         imageView.setColorFilter(Color.GREEN);
     }
 
-    @OnClick({R2.id.button, R2.id.imageView})
+    @OnClick({R.id.button, R.id.imageView})
     public void test(View view) {
         String msg = "";
         if (view.getId() == R.id.button){
@@ -52,7 +51,7 @@ public class TestActivity extends AppCompatActivity {
         showMsg("OnClick: " + msg);
     }
 
-    @OnClick({R2.id.button, R2.id.imageView})
+    @OnClick({R.id.button, R.id.imageView})
     public void test3(View view) {
         String msg = "";
         if (view.getId() == R.id.button){
@@ -65,7 +64,7 @@ public class TestActivity extends AppCompatActivity {
         showMsg("OnClick: " + msg);
     }
 
-    @OnLongClick({R2.id.button, R2.id.imageView})
+    @OnLongClick({R.id.button, R.id.imageView})
     public boolean test2(View view) {
         String msg = "";
         if (view.getId() == R.id.button){
@@ -79,7 +78,7 @@ public class TestActivity extends AppCompatActivity {
         return true;
     }
 
-    @OnCheckedChanged({R2.id.checkBox, R2.id.switch1, R2.id.toggleButton, R2.id.radioButton1, R2.id.radioButton2})
+    @OnCheckedChanged({R.id.checkBox, R.id.switch1, R.id.toggleButton, R.id.radioButton1, R.id.radioButton2})
     public void testCheckedChange(CompoundButton v, boolean isChecked) {
         Log.d("OnCheckedChanged", "testCheckedChange: " + v.getText() + ", isChecked: " + isChecked);
         String msg = "";
@@ -105,12 +104,12 @@ public class TestActivity extends AppCompatActivity {
         showMsg("OnCheckedChanged: " + msg + "\nisChecked: " + isChecked);
     }
 
-    @OnTextChanged(R2.id.editText)
+    @OnTextChanged(R.id.editText)
     public void testTextChanged(View v, CharSequence s, int start, int before, int count) {
         showMsg("testTextChanged: " + s);
     }
 
-    @OnEditorAction(R2.id.editText)
+    @OnEditorAction(R.id.editText)
     public boolean testEditorAction(View v, int actionId, KeyEvent event) {
         showMsg("testEditorAction: " + ((EditText) v).getText());
         return true;

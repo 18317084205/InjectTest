@@ -8,7 +8,6 @@ import com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask
 import com.android.build.gradle.tasks.ProcessAndroidResources
 import com.android.builder.model.SourceProvider
 import groovy.util.slurpersupport.GPathResult
-import kotlin.io.FilesKt
 import org.gradle.api.Action
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Plugin
@@ -71,35 +70,34 @@ class Injector implements Plugin<Project> {
         }
     }
 
-
     void configureR2Generation(Project project, DomainObjectSet<BaseVariant> variants) {
         variants.all { variant ->
-            File buildDir = project.getBuildDir();
-            StringBuilder stringBuilder = (new StringBuilder()).append("generated/source/r2/");
-            File outputDir = FilesKt.resolve(buildDir, stringBuilder.append(variant.getDirName()).toString());
             String packageName = getPackageName(variant);
             AtomicBoolean atomicBoolean = new AtomicBoolean();
-
+            def outputDir
             variant.outputs.all { output ->
                 ProcessAndroidResources processResources = output.processResources
                 if (atomicBoolean.compareAndSet(false, true)) {
                     def file
                     if (processResources instanceof GenerateLibraryRFileTask) {
-                        file = ((GenerateLibraryRFileTask) processResources).getTextSymbolOutputFile()
+                        file = ((GenerateLibraryRFileTask) processResources).textSymbolOutputFile
+                        outputDir = ((GenerateLibraryRFileTask) processResources).sourceOutputDir
                     } else if (processResources instanceof LinkApplicationAndroidResourcesTask) {
-                        file = ((LinkApplicationAndroidResourcesTask) processResources).getTextSymbolOutputFile()
+                        file = ((LinkApplicationAndroidResourcesTask) processResources).textSymbolOutputFile
+                        outputDir = ((LinkApplicationAndroidResourcesTask) processResources).sourceOutputDir
                     } else {
                         throw (Throwable) (new RuntimeException("Minimum supported Android Gradle Plugin is 3.1.0"))
                     }
+
                     def injectorRFile = project.files(file).builtBy(processResources)
 
-                    project.tasks.create("generate${variant.name.capitalize()}R2", R2Generator.class, new Action<R2Generator>() {
+                    project.tasks.create("generate${variant.name.capitalize()}NewR", RGenerator.class, new Action<RGenerator>() {
                         @Override
-                        void execute(R2Generator generator) {
+                        void execute(RGenerator generator) {
                             generator.outputDir = outputDir
                             generator.fileCollection = injectorRFile
                             generator.packageName = packageName
-                            generator.className = "R2"
+                            generator.className = "R"
                             variant.registerJavaGeneratingTask(generator, outputDir)
                         }
                     })

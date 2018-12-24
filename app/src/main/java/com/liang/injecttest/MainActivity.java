@@ -1,5 +1,6 @@
 package com.liang.injecttest;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jianbo.libraryb.TestBActivity;
 import com.liang.annotations.BindView;
 import com.liang.annotations.OnCheckedChanged;
 import com.liang.annotations.OnClick;
@@ -19,6 +21,7 @@ import com.liang.annotations.OnEditorAction;
 import com.liang.annotations.OnLongClick;
 import com.liang.annotations.OnTextChanged;
 import com.liang.inject.JInjector;
+import com.liang.librarytest.TestActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.button:
                 msg = "button";
+                startActivity(new Intent(MainActivity.this, TestActivity.class));
                 break;
             case R.id.imageView:
                 msg = "imageView";
+                startActivity(new Intent(MainActivity.this, TestBActivity.class));
                 break;
         }
         showMsg("OnClick: " + msg);

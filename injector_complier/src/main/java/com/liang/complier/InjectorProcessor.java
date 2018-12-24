@@ -9,7 +9,6 @@ import com.liang.annotations.OnEditorAction;
 import com.liang.annotations.OnLongClick;
 import com.liang.annotations.OnTextChanged;
 import com.squareup.javapoet.TypeName;
-import com.sun.source.util.Trees;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -41,7 +40,6 @@ public class InjectorProcessor extends AbstractProcessor {
     private Elements elements; //元素相关的辅助类
     private Messager messager; //日志相关的辅助类
     private Map<String, AnnotatedClass> annotatedClassMap;
-    Trees trees;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -50,11 +48,6 @@ public class InjectorProcessor extends AbstractProcessor {
         elements = processingEnvironment.getElementUtils();
         messager = processingEnvironment.getMessager();
         annotatedClassMap = new TreeMap<>();
-
-        try {
-            trees = Trees.instance(processingEnvironment);
-        } catch (IllegalArgumentException ignored) {
-        }
     }
 
     @Override
@@ -93,27 +86,27 @@ public class InjectorProcessor extends AbstractProcessor {
             ListenerClass listener = clazz.getAnnotation(ListenerClass.class);
             Annotation annotation = element.getAnnotation(clazz);
 
-            List<String> resIds = null;
+            int[] resIds = {};
             if (annotation instanceof BindView) {
-                resIds = Containers.elementToIdRes(trees, element, BindView.class, ((BindView) annotation).value());
+                resIds = ((BindView) annotation).value();
             }
             if (annotation instanceof OnClick) {
-                resIds = Containers.elementToIdRes(trees, element, OnClick.class, ((OnClick) annotation).value());
+                resIds = ((OnClick) annotation).value();
             }
             if (annotation instanceof OnLongClick) {
-                resIds = Containers.elementToIdRes(trees, element, OnLongClick.class, ((OnLongClick) annotation).value());
+                resIds = ((OnLongClick) annotation).value();
             }
             if (annotation instanceof OnCheckedChanged) {
-                resIds = Containers.elementToIdRes(trees, element, OnCheckedChanged.class, ((OnCheckedChanged) annotation).value());
+                resIds = ((OnCheckedChanged) annotation).value();
             }
             if (annotation instanceof OnEditorAction) {
-                resIds = Containers.elementToIdRes(trees, element, OnEditorAction.class, ((OnEditorAction) annotation).value());
+                resIds = ((OnEditorAction) annotation).value();
             }
             if (annotation instanceof OnTextChanged) {
-                resIds = Containers.elementToIdRes(trees, element, OnTextChanged.class, ((OnTextChanged) annotation).value());
+                resIds = ((OnTextChanged) annotation).value();
             }
 
-            if (resIds.isEmpty()) {
+            if (resIds.length == 0) {
                 throw new RuntimeException("View`s id is null");
             }
 

@@ -7,13 +7,13 @@ import java.util.List;
 
 public class MethodViewBinding {
     private final String name;
-    private final List<String> resIds = new ArrayList<>();
+    private final int[] resIds;
     private final String setter;
     private TypeName viewTypeName;
-    public MethodViewBinding(String name, List<String> resIds, String setter) {
+
+    public MethodViewBinding(String name, int[] resIds, String setter) {
         this.name = name;
-        this.resIds.clear();
-        this.resIds.addAll(resIds);
+        this.resIds = resIds;
         this.setter = setter;
     }
 
@@ -21,7 +21,7 @@ public class MethodViewBinding {
         return name;
     }
 
-    public List<String> getIds() {
+    public int[] getIds() {
         return resIds;
     }
 
