@@ -74,30 +74,27 @@ class Injector implements Plugin<Project> {
         variants.all { variant ->
             String packageName = getPackageName(variant);
             AtomicBoolean atomicBoolean = new AtomicBoolean();
-            def outputDir
             variant.outputs.all { output ->
                 ProcessAndroidResources processResources = output.processResources
                 if (atomicBoolean.compareAndSet(false, true)) {
                     def file
                     if (processResources instanceof GenerateLibraryRFileTask) {
                         file = ((GenerateLibraryRFileTask) processResources).textSymbolOutputFile
-                        outputDir = ((GenerateLibraryRFileTask) processResources).sourceOutputDir
                     } else if (processResources instanceof LinkApplicationAndroidResourcesTask) {
                         file = ((LinkApplicationAndroidResourcesTask) processResources).textSymbolOutputFile
-                        outputDir = ((LinkApplicationAndroidResourcesTask) processResources).sourceOutputDir
                     } else {
                         throw (Throwable) (new RuntimeException("Minimum supported Android Gradle Plugin is 3.1.0"))
                     }
 
                     def injectorRFile = project.files(file).builtBy(processResources)
-
+                    def outputDir = processResources.sourceOutputDir
                     project.tasks.create("generate${variant.name.capitalize()}NewR", RGenerator.class, new Action<RGenerator>() {
                         @Override
                         void execute(RGenerator generator) {
                             generator.outputDir = outputDir
                             generator.fileCollection = injectorRFile
                             generator.packageName = packageName
-                            generator.className = "R"
+                            generator.className = "R2"
                             variant.registerJavaGeneratingTask(generator, outputDir)
                         }
                     })

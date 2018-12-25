@@ -8,7 +8,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
-class RGenerator extends DefaultTask{
+class RGenerator extends DefaultTask {
     @OutputDirectory
     @Nullable
     File outputDir;
@@ -26,7 +26,20 @@ class RGenerator extends DefaultTask{
     String className;
 
     @TaskAction
-     void brewJava() {
+    void brewJava() {
+
+        def path = outputDir.path + "\\" + packageName.replace(".", "\\") + "\\R.java"
+
+        print("test project path..." + path + "\n")
+
+//        JClassLoader classLoader = new JClassLoader()
+//
+//        classLoader.findClass(path)
+
+
+
+
+
         RClassBuilder finalRClassBuilder = new RClassBuilder(packageName, className)
         ResourceReader reader = new ResourceReader(finalRClassBuilder)
         reader.readSymbolTable(fileCollection.getSingleFile())

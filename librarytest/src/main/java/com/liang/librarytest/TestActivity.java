@@ -22,10 +22,10 @@ import com.liang.inject.JInjector;
 
 public class TestActivity extends AppCompatActivity {
 
-    @BindView(R.id.button)
+    @BindView(R2.id.button)
     Button button;
 
-    @BindView(R.id.imageView)
+    @BindView(R2.id.imageView)
     ImageView imageView;
 
     Toast toast;
@@ -35,85 +35,86 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         JInjector.bind(this);
+        int res = R.id.button;
         imageView.setColorFilter(Color.GREEN);
     }
 
-    @OnClick({R.id.button, R.id.imageView})
-    public void test(View view) {
-        String msg = "";
-        if (view.getId() == R.id.button){
-            msg = "button";
-        }
-
-        if (view.getId() == R.id.imageView){
-            msg = "imageView";
-        }
-        showMsg("OnClick: " + msg);
-    }
-
-    @OnClick({R.id.button, R.id.imageView})
-    public void test3(View view) {
-        String msg = "";
-        if (view.getId() == R.id.button){
-            msg = "button";
-        }
-
-        if (view.getId() == R.id.imageView){
-            msg = "imageView";
-        }
-        showMsg("OnClick: " + msg);
-    }
-
-    @OnLongClick({R.id.button, R.id.imageView})
-    public boolean test2(View view) {
-        String msg = "";
-        if (view.getId() == R.id.button){
-            msg = "button";
-        }
-
-        if (view.getId() == R.id.imageView){
-            msg = "imageView";
-        }
-        showMsg("OnLongClick: " + msg);
-        return true;
-    }
-
-    @OnCheckedChanged({R.id.checkBox, R.id.switch1, R.id.toggleButton, R.id.radioButton1, R.id.radioButton2})
-    public void testCheckedChange(CompoundButton v, boolean isChecked) {
-        Log.d("OnCheckedChanged", "testCheckedChange: " + v.getText() + ", isChecked: " + isChecked);
-        String msg = "";
-        if (v.getId() == R.id.checkBox){
-            msg = "checkBox";
-        }
-
-        if (v.getId() == R.id.switch1){
-            msg = "switch1";
-        }
-
-        if (v.getId() == R.id.toggleButton){
-            msg = "toggleButton";
-        }
-
-        if (v.getId() == R.id.radioButton1){
-            msg = "radioButton1";
-        }
-        if (v.getId() == R.id.radioButton2){
-            msg = "radioButton2";
-        }
-
-        showMsg("OnCheckedChanged: " + msg + "\nisChecked: " + isChecked);
-    }
-
-    @OnTextChanged(R.id.editText)
-    public void testTextChanged(View v, CharSequence s, int start, int before, int count) {
-        showMsg("testTextChanged: " + s);
-    }
-
-    @OnEditorAction(R.id.editText)
-    public boolean testEditorAction(View v, int actionId, KeyEvent event) {
-        showMsg("testEditorAction: " + ((EditText) v).getText());
-        return true;
-    }
+//    @OnClick({R.id.button, R.id.imageView})
+//    public void test(View view) {
+//        String msg = "";
+//        if (view.getId() == R.id.button){
+//            msg = "button";
+//        }
+//
+//        if (view.getId() == R.id.imageView){
+//            msg = "imageView";
+//        }
+//        showMsg("OnClick: " + msg);
+//    }
+//
+//    @OnClick({R.id.button, R.id.imageView})
+//    public void test3(View view) {
+//        String msg = "";
+//        if (view.getId() == R.id.button){
+//            msg = "button";
+//        }
+//
+//        if (view.getId() == R.id.imageView){
+//            msg = "imageView";
+//        }
+//        showMsg("OnClick: " + msg);
+//    }
+//
+//    @OnLongClick({R.id.button, R.id.imageView})
+//    public boolean test2(View view) {
+//        String msg = "";
+//        if (view.getId() == R.id.button){
+//            msg = "button";
+//        }
+//
+//        if (view.getId() == R.id.imageView){
+//            msg = "imageView";
+//        }
+//        showMsg("OnLongClick: " + msg);
+//        return true;
+//    }
+//
+//    @OnCheckedChanged({R.id.checkBox, R.id.switch1, R.id.toggleButton, R.id.radioButton1, R.id.radioButton2})
+//    public void testCheckedChange(CompoundButton v, boolean isChecked) {
+//        Log.d("OnCheckedChanged", "testCheckedChange: " + v.getText() + ", isChecked: " + isChecked);
+//        String msg = "";
+//        if (v.getId() == R.id.checkBox){
+//            msg = "checkBox";
+//        }
+//
+//        if (v.getId() == R.id.switch1){
+//            msg = "switch1";
+//        }
+//
+//        if (v.getId() == R.id.toggleButton){
+//            msg = "toggleButton";
+//        }
+//
+//        if (v.getId() == R.id.radioButton1){
+//            msg = "radioButton1";
+//        }
+//        if (v.getId() == R.id.radioButton2){
+//            msg = "radioButton2";
+//        }
+//
+//        showMsg("OnCheckedChanged: " + msg + "\nisChecked: " + isChecked);
+//    }
+//
+//    @OnTextChanged(R.id.editText)
+//    public void testTextChanged(View v, CharSequence s, int start, int before, int count) {
+//        showMsg("testTextChanged: " + s);
+//    }
+//
+//    @OnEditorAction(R.id.editText)
+//    public boolean testEditorAction(View v, int actionId, KeyEvent event) {
+//        showMsg("testEditorAction: " + ((EditText) v).getText());
+//        return true;
+//    }
 
     private void showMsg(String msg) {
         if (toast != null) {

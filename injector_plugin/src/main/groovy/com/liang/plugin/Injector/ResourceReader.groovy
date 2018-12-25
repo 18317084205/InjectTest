@@ -23,13 +23,15 @@ class ResourceReader {
         })
     }
 
+
+
     void processLine(String line) {
         def values = line.split(" ")
         if (values.size() >= 4) {
             def javaType = values[0]
             def symbolType = values[1]
             def fieldName = values[2]
-            def fieldValue = values[3]
+            def fieldValue = "-"+values[3]
             if (javaType == "int" && symbolType in RClassBuilder.supported_types) {
                 finalRClassBuilder.addResourceField(symbolType, fieldName, fieldValue)
             }

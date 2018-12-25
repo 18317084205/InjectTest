@@ -1,5 +1,6 @@
 package com.liang.inject;
 
+import android.content.Context;
 import android.support.annotation.IdRes;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,17 @@ public class ViewUtils {
             enabled = true;
         }
     };
+
+    public static int getIdentifier(Context context, String idName) {
+        try {
+            int view_id = R.id.class.getField(idName).getInt(null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return context.getResources().getIdentifier(idName, "id", context.getPackageName());
+    }
 
     public static <T extends View> T findViewAsType(View view, @IdRes int id) {
         return (T) view.findViewById(id);//强转

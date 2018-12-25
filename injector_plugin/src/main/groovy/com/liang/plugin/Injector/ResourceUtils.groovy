@@ -1,5 +1,7 @@
 package com.liang.plugin.Injector
 
+import org.gradle.api.Project
+
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
@@ -109,29 +111,40 @@ public class ResourceUtils {
         }
     }
 
-    def replaceResIdInJavaDir(File srcFile, String newPkgIdStr) {
+    static def replaceResIdInJavaDir(File srcFile, Project project) {
+        print("project replaceResIdInJavaDir..." + srcFile.path + "\n")
         if (srcFile.isFile()) {
-            if (srcFile.name.equals("R.java")) {
+            print("project name..." + srcFile.name + "\n")
+            if (srcFile.name == "R.java") {
                 def list = []
-                file(srcFile).withReader('UTF-8') { reader ->
+                project.file(srcFile).withReader('UTF-8') { reader ->
                     reader.eachLine {
-                        if (it.contains('0x7f')) {
-                            it = it.replace('0x7f', newPkgIdStr)
+                        if (it.contains("=")) {
+                            def str = it.split(" ")
+                            if (str.length > 5) {
+                                it = it.replace('static', "static final")
+                                print("project replace reader..." + it + "\n")
+                            }
                         }
                         list.add(it + "\n")
                     }
                 }
-                file(srcFile).withWriter('UTF-8') { writer ->
+                project.file(srcFile).withWriter('UTF-8') { writer ->
                     list.each {
+                        print("project replace write..." + it )
                         writer.write(it)
                     }
                 }
             }
         } else {
             def fileList = srcFile.listFiles()
-            for (def i = 0; i < fileList.length; i++) {
-                replaceResIdInJavaDir(fileList[i], newPkgIdStr)
+            fileList.each {
+                print("project fileList..." + it.name + "\n")
+                replaceResIdInJavaDir(it, project)
             }
+//            for (def i = 0; i < fileList.length; i++) {
+//                replaceResIdInJavaDir(fileList[i], project)
+//            }
         }
     }
 
