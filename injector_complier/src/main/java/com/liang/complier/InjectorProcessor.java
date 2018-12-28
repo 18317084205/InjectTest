@@ -106,9 +106,9 @@ public class InjectorProcessor extends AbstractProcessor {
                 resIds = ((OnTextChanged) annotation).value();
             }
 
-            if (resIds.length == 0) {
-                throw new RuntimeException("View`s id is null");
-            }
+//            if (resIds.length == 0) {
+//                throw new RuntimeException("View`s id is null");
+//            }
 
             if (listener != null) {
                 MethodViewBinding viewBinding = new MethodViewBinding(element.getSimpleName().toString(), resIds, listener.setter());

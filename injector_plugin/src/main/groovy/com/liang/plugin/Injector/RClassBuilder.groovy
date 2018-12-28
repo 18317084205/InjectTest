@@ -62,7 +62,7 @@ class RClassBuilder {
                 .initializer('new $T<>()', hashMap)
         result.addField(fieldSpecBuilder.build())
 
-        result.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE).build())
+        result.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE).addStatement('$L()', INIT_ID_TYPE).build())
 
         result.addMethod(MethodSpec.methodBuilder("getId").addModifiers(Modifier.PUBLIC)
                 .returns(value).addParameter(TypeName.INT, 'r2Id')
@@ -80,6 +80,7 @@ class RClassBuilder {
 
         def initIds = resourceMethodSpecTypes.get(INIT_ID_TYPE);
         if (initIds != null) {
+            initIds = MethodSpec.methodBuilder(INIT_ID_TYPE).addModifiers(Modifier.PRIVATE)
             result.addMethod(initIds.build());
         }
 

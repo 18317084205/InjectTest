@@ -18,14 +18,14 @@ public class ViewUtils {
         }
     };
 
-    public static int getIdentifier(Context context, String idName) {
-        try {
-            int view_id = R.id.class.getField(idName).getInt(null);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+    public static int getRealityId(Context context, String idName) {
+//        try {
+//            int view_id = R.id.class.getField(idName).getInt(null);
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
         return context.getResources().getIdentifier(idName, "id", context.getPackageName());
     }
 

@@ -60,6 +60,14 @@ public class AnnotatedClass {
 
         addBingListenerMethodCode(injectClass);
 
+        MethodSpec.Builder getRealityId = MethodSpec.methodBuilder(Containers.METHOD_GET_REALITY_ID);
+        getRealityId.addModifiers(Modifier.PRIVATE);
+        getRealityId.returns(TypeName.INT);
+        getRealityId.addParameter(TypeName.INT, "id");
+        getRealityId.addStatement("return id > 0 ? id : $T.$L($L,R2.getInstance().getId(id))", Containers.VIEW_UTILS,
+                Containers.METHOD_GET_REALITY_ID, parameterName);
+
+        injectClass.addMethod(getRealityId.build());
         String packageName = elements.getPackageOf(typeElement).getQualifiedName().toString();
         return JavaFile.builder(packageName, injectClass.build()).build();
     }
@@ -91,7 +99,7 @@ public class AnnotatedClass {
         CodeBlock.Builder builder = CodeBlock.builder();
         for (int id : viewBinding.getIds()) {
             builder.add("$L.$L = ", parameterName, viewBinding.getName());
-            builder.add("$T.findViewAsType(view,$L)", Containers.VIEW_UTILS, id);
+            builder.add("$T.findViewAsType(view,$L($L))", Containers.VIEW_UTILS, Containers.METHOD_GET_REALITY_ID, id);
             break;
         }
         return builder;
@@ -170,7 +178,7 @@ public class AnnotatedClass {
             StringBuilder methodBuilder = new StringBuilder("if(");
             int[] ids = viewBinding.getIds();
             for (int i = 0; i < ids.length; i++) {
-                methodBuilder.append(i == 0 ? "v.getId()==" + ids[i] : "\n||v.getId()==" + ids[i]);
+                methodBuilder.append(i == 0 ? "v.getId()==getRealityId(" + ids[i] + ")" : "\n||v.getId()==getRealityId(" + ids[i] + ")");
             }
             methodBuilder.append(")");
             builder.beginControlFlow(methodBuilder.toString());
@@ -219,7 +227,8 @@ public class AnnotatedClass {
         for (MethodViewBinding viewBinding : methodViewBindings) {
             for (int entry : viewBinding.getIds()) {
                 if (!viewBinding.getSetter().isEmpty()) {
-                    builder.addStatement("$T.$L(view,$L,listener)", Containers.VIEW_UTILS, viewBinding.getSetter(), entry);
+                    builder.addStatement("$T.$L(view,$L($L),listener)", Containers.VIEW_UTILS,
+                            viewBinding.getSetter(), Containers.METHOD_GET_REALITY_ID, entry);
                 }
             }
         }

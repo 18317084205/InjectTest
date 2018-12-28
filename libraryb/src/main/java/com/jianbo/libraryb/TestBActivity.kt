@@ -10,7 +10,7 @@ import com.liang.inject.JInjector
 
 class TestBActivity : AppCompatActivity() {
 
-    @BindView(R.id.button)
+    @BindView(R2.id.button)
     lateinit var button: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {

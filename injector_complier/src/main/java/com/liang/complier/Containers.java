@@ -24,6 +24,8 @@ public class Containers {
     public static final String INJECTOR = "$$Injector";
     public static final String METHOD_UNBIND = "unbind";
     public static final String METHOD_SET_LISTENER = "setViewListener";
+    public static final String METHOD_GET_REALITY_ID = "getRealityId";
+
 
     public static Set<Class<? extends Annotation>> getSupportedAnnotations() {
         Set<Class<? extends Annotation>> annotations = new LinkedHashSet<>();

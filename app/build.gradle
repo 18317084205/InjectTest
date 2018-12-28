@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.liang.inject'
+apply plugin: 'com.liang.inject'
 
 android {
     compileSdkVersion 28

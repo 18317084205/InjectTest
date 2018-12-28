@@ -25,24 +25,17 @@ class RGenerator extends DefaultTask {
     @Nullable
     String className;
 
+    @Input
+    @Nullable
+    String isLibrary;
+
     @TaskAction
     void brewJava() {
-
-        def path = outputDir.path + "\\" + packageName.replace(".", "\\") + "\\R.java"
-
-        print("test project path..." + path + "\n")
-
-//        JClassLoader classLoader = new JClassLoader()
-//
-//        classLoader.findClass(path)
-
-
-
-
-
         RClassBuilder finalRClassBuilder = new RClassBuilder(packageName, className)
-        ResourceReader reader = new ResourceReader(finalRClassBuilder)
-        reader.readSymbolTable(fileCollection.getSingleFile())
+        if (isLibrary){
+            ResourceReader reader = new ResourceReader(finalRClassBuilder)
+            reader.readSymbolTable(fileCollection.getSingleFile())
+        }
         finalRClassBuilder.build().writeTo(outputDir)
     }
 }

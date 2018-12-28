@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class Injector implements Plugin<Project> {
     final def KOTLIN_PLUGIN = 'kotlin-gradle-plugin'
 //    def versions = "1.0.4"
+    def isLib
 
     @Override
     void apply(Project project) {
@@ -30,15 +31,13 @@ class Injector implements Plugin<Project> {
         }
 
         def isApp = project.plugins.withType(AppPlugin)
-        def isLib = project.plugins.withType(LibraryPlugin)
+        isLib = project.plugins.withType(LibraryPlugin)
         if (!isApp && !isLib) {
             throw new IllegalStateException("'android-application' or 'android-library' plugin required.")
         }
 
-        if (isLib) {
-            def variants = project.android.libraryVariants
-            configureR2Generation(project, variants)
-        }
+        def variants = isLib ? project.android.libraryVariants : project.android.applicationVariants
+        configureR2Generation(project, variants)
 //        ProjectTest.test(project)
 
         def isKotlin = checkKotlin(project)
@@ -72,8 +71,8 @@ class Injector implements Plugin<Project> {
 
     void configureR2Generation(Project project, DomainObjectSet<BaseVariant> variants) {
         variants.all { variant ->
-            String packageName = getPackageName(variant);
-            AtomicBoolean atomicBoolean = new AtomicBoolean();
+            String packageName = getPackageName(variant)
+            AtomicBoolean atomicBoolean = new AtomicBoolean()
             variant.outputs.all { output ->
                 ProcessAndroidResources processResources = output.processResources
                 if (atomicBoolean.compareAndSet(false, true)) {
@@ -95,6 +94,7 @@ class Injector implements Plugin<Project> {
                             generator.fileCollection = injectorRFile
                             generator.packageName = packageName
                             generator.className = "R2"
+                            generator.isLibrary = isLib
                             variant.registerJavaGeneratingTask(generator, outputDir)
                         }
                     })
