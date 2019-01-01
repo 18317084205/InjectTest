@@ -8,9 +8,7 @@ import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.sun.xml.internal.ws.util.StringUtils
-
 import javax.lang.model.element.Modifier
-import java.lang.reflect.Type
 
 class RClassBuilder {
 
@@ -50,7 +48,7 @@ class RClassBuilder {
 
         // 泛型的类型
         ClassName kay = ClassName.get('java.lang', 'Integer')
-        ClassName value = ClassName.get('java.lang', 'String')
+        ClassName value = ClassName.get('java.lang', 'Integer')
         // map类型
         ClassName map = ClassName.get('java.util', 'Map')
         // HashMap类型
@@ -66,7 +64,7 @@ class RClassBuilder {
 
         result.addMethod(MethodSpec.methodBuilder("getId").addModifiers(Modifier.PUBLIC)
                 .returns(value).addParameter(TypeName.INT, 'r2Id')
-                .addStatement('return $L.containsKey(r2Id) ? $L.get(r2Id) : ""', MAP_TYPE, MAP_TYPE)
+                .addStatement('return $L.containsKey(r2Id) ? $L.get(r2Id) : 0', MAP_TYPE, MAP_TYPE)
                 .build())
 
         result.addMethod(MethodSpec.methodBuilder(INIT_TYPE).addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -79,11 +77,10 @@ class RClassBuilder {
                 .build())
 
         def initIds = resourceMethodSpecTypes.get(INIT_ID_TYPE);
-        if (initIds != null) {
+        if (initIds == null) {
             initIds = MethodSpec.methodBuilder(INIT_ID_TYPE).addModifiers(Modifier.PRIVATE)
-            result.addMethod(initIds.build());
         }
-
+        result.addMethod(initIds.build());
         return JavaFile.builder(packageName, result.build())
                 .addFileComment("AUTO-GENERATED FILE.  DO NOT MODIFY.")
                 .build()
@@ -113,7 +110,7 @@ class RClassBuilder {
             initBuilder = MethodSpec.methodBuilder(INIT_ID_TYPE).addModifiers(Modifier.PRIVATE)
             resourceMethodSpecTypes.put(INIT_ID_TYPE, initBuilder)
         }
-        initBuilder.addStatement('$L.put($L, "R.$L.$L")', MAP_TYPE, fieldValue, type, fieldName)
+        initBuilder.addStatement('$L.put($L, R.$L.$L)', MAP_TYPE, fieldValue, type, fieldName)
 
     }
 

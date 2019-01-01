@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
-        android:id="@+id/test_textView"
+        android:id="@+id/kot_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -13,10 +12,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/kot_radioGroup" />
 
     <Button
-        android:id="@+id/test_button"
+        android:id="@+id/kot_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -30,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/test_imageView"
+        android:id="@+id/kot_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -40,11 +39,11 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_button"
+        app:layout_constraintTop_toBottomOf="@+id/kot_button"
         />
 
     <TextView
-        android:id="@+id/test_TextView"
+        android:id="@+id/kot_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -55,10 +54,10 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/kot_imageView" />
 
     <CheckBox
-        android:id="@+id/test_checkBox"
+        android:id="@+id/kot_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -69,10 +68,10 @@
         android:text="CheckBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_TextView" />
+        app:layout_constraintTop_toBottomOf="@+id/kot_TextView" />
 
     <EditText
-        android:id="@+id/test_editText"
+        android:id="@+id/kot_editText"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -82,10 +81,10 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/kot_checkBox" />
 
     <Switch
-        android:id="@+id/test_switch1"
+        android:id="@+id/kot_switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -96,10 +95,10 @@
         android:text="Switch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/kot_editText" />
 
     <ToggleButton
-        android:id="@+id/test_toggleButton"
+        android:id="@+id/kot_toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -110,30 +109,28 @@
         android:text="ToggleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_switch1" />
+        app:layout_constraintTop_toBottomOf="@+id/kot_switch1" />
 
     <RadioGroup
-        android:id="@+id/test_radioGroup"
+        android:id="@+id/kot_radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_toggleButton">
+        app:layout_constraintTop_toBottomOf="@+id/kot_toggleButton">
 
         <RadioButton
-            android:id="@+id/test_radioButton1"
+            android:id="@+id/kot_radioButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RadioButton1" />
 
         <RadioButton
-            android:id="@+id/test_radioButton2"
+            android:id="@+id/kot_radioButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RadioButton2" />
     </RadioGroup>
-
-
 </android.support.constraint.ConstraintLayout>

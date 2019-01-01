@@ -1,9 +1,9 @@
 package com.liang.inject;
 
-import android.content.Context;
 import android.support.annotation.IdRes;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -18,23 +18,17 @@ public class ViewUtils {
         }
     };
 
-    public static int getRealityId(Context context, String idName) {
-//        try {
-//            int view_id = R.id.class.getField(idName).getInt(null);
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        }
-        return context.getResources().getIdentifier(idName, "id", context.getPackageName());
-    }
-
     public static <T extends View> T findViewAsType(View view, @IdRes int id) {
+        Log.e("ViewUtils", "findViewAsType id: " + id);
         return (T) view.findViewById(id);//强转
     }
 
     public static void setOnClick(View view, @IdRes int id, final ViewListener listener) {
-        view.findViewById(id).setOnClickListener(new View.OnClickListener() {
+        View v = view.findViewById(id);
+        if (v == null){
+            return;
+        }
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (enabled) {
@@ -45,11 +39,15 @@ public class ViewUtils {
                     }
                 }
             }
-        } );
+        });
     }
 
     public static void setOnLongClick(View view, @IdRes int id, final ViewListener listener) {
-        view.findViewById(id).setOnLongClickListener(new View.OnLongClickListener() {
+        View v = view.findViewById(id);
+        if (v == null){
+            return;
+        }
+        v.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (listener != null) {
@@ -62,6 +60,9 @@ public class ViewUtils {
 
     public static void setOnCheckedChange(View view, @IdRes int id, final ViewListener listener) {
         View v = view.findViewById(id);
+        if (v == null){
+            return;
+        }
         if (v instanceof CompoundButton) {
             ((CompoundButton) v).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -76,6 +77,9 @@ public class ViewUtils {
 
     public static void addTextChanged(View view, @IdRes int id, final ViewListener listener) {
         final View v = view.findViewById(id);
+        if (v == null){
+            return;
+        }
         if (v instanceof TextView) {
             ((TextView) v).addTextChangedListener(new TextWatcher() {
                 @Override
@@ -98,6 +102,9 @@ public class ViewUtils {
 
     public static void setOnEditorAction(View view, @IdRes int id, final ViewListener listener) {
         View v = view.findViewById(id);
+        if (v == null){
+            return;
+        }
         if (v instanceof TextView) {
             ((TextView) v).setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override

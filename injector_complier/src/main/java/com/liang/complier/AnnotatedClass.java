@@ -64,8 +64,7 @@ public class AnnotatedClass {
         getRealityId.addModifiers(Modifier.PRIVATE);
         getRealityId.returns(TypeName.INT);
         getRealityId.addParameter(TypeName.INT, "id");
-        getRealityId.addStatement("return id > 0 ? id : $T.$L($L,R2.getInstance().getId(id))", Containers.VIEW_UTILS,
-                Containers.METHOD_GET_REALITY_ID, parameterName);
+        getRealityId.addStatement("return id > 0 ? id : R2.getInstance().getId(id)");
 
         injectClass.addMethod(getRealityId.build());
         String packageName = elements.getPackageOf(typeElement).getQualifiedName().toString();

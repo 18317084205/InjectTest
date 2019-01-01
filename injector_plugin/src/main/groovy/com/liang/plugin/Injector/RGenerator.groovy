@@ -3,6 +3,7 @@ package com.liang.plugin.Injector
 import com.android.annotations.Nullable
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
+import org.gradle.api.plugins.PluginCollection
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
@@ -27,7 +28,7 @@ class RGenerator extends DefaultTask {
 
     @Input
     @Nullable
-    String isLibrary;
+    boolean isLibrary;
 
     @TaskAction
     void brewJava() {

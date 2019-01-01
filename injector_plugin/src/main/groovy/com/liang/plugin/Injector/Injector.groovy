@@ -17,9 +17,9 @@ import org.gradle.api.initialization.dsl.ScriptHandler
 import java.util.concurrent.atomic.AtomicBoolean
 
 class Injector implements Plugin<Project> {
-    final def KOTLIN_PLUGIN = 'kotlin-gradle-plugin'
-//    def versions = "1.0.4"
-    def isLib
+//    final def KOTLIN_PLUGIN = 'kotlin-gradle-plugin'
+    final def KOTLIN_PLUGIN = 'kotlin-android'
+    def versions = "1.0.5"
 
     @Override
     void apply(Project project) {
@@ -31,45 +31,51 @@ class Injector implements Plugin<Project> {
         }
 
         def isApp = project.plugins.withType(AppPlugin)
-        isLib = project.plugins.withType(LibraryPlugin)
+        def isLib = project.plugins.withType(LibraryPlugin)
+        boolean isLibrary
         if (!isApp && !isLib) {
             throw new IllegalStateException("'android-application' or 'android-library' plugin required.")
         }
 
+        if (isLib) {
+            isLibrary = true
+        }
+
         def variants = isLib ? project.android.libraryVariants : project.android.applicationVariants
-        configureR2Generation(project, variants)
+        configureR2Generation(project, variants, isLibrary)
 //        ProjectTest.test(project)
 
         def isKotlin = checkKotlin(project)
 
-        println("project isKotlin->" + isKotlin)
+//        println("project isKotlin->" + isKotlin)
 
-//        if (isKotlin) {
-//            project.apply plugin: 'kotlin-kapt'
-//        }
-//
-//        project.dependencies {
-//            implementation "org.liang:injector:${versions}"
-//            implementation "org.liang:injector_annotations:${versions}"
-//            if (isKotlin) {
-//                kapt "org.liang:injector_complier:$versions"
-//            } else {
-//                annotationProcessor "org.liang:injector_complier:${versions}"
-//            }
-//        }
-    }
+        if (isKotlin) {
+            project.apply plugin: 'kotlin-kapt'
+        }
 
-    boolean checkKotlin(Project project) {
-        def dependencies = project.parent.buildscript.configurations.
-                getByName(ScriptHandler.CLASSPATH_CONFIGURATION).dependencies
-        dependencies.each {
-            if (it.name == KOTLIN_PLUGIN) {
-                return true
+        project.dependencies {
+            implementation "org.liang:injector:${versions}"
+            implementation "org.liang:injector_annotations:${versions}"
+            if (isKotlin) {
+                kapt "org.liang:injector_complier:$versions"
+            } else {
+                annotationProcessor "org.liang:injector_complier:${versions}"
             }
         }
     }
 
-    void configureR2Generation(Project project, DomainObjectSet<BaseVariant> variants) {
+    boolean checkKotlin(Project project) {
+//        def dependencies = project.parent.buildscript.configurations.
+//                getByName(ScriptHandler.CLASSPATH_CONFIGURATION).dependencies
+//        dependencies.each {
+//            if (it.name == KOTLIN_PLUGIN) {
+//                return true
+//            }
+//        }
+        return project.pluginManager.hasPlugin(KOTLIN_PLUGIN)
+    }
+
+    void configureR2Generation(Project project, DomainObjectSet<BaseVariant> variants, boolean isLib) {
         variants.all { variant ->
             String packageName = getPackageName(variant)
             AtomicBoolean atomicBoolean = new AtomicBoolean()
