@@ -10,7 +10,7 @@
 ```
 classpath 'org.liang.plugin:injector_tools:1.0.5'
 ```
-###### 然后在各个module的Gradle中引入插件
+###### 然后在要使用此库的module的Gradle中引入插件
 ```
 apply plugin: 'com.liang.inject'
 ```
