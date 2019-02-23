@@ -29,6 +29,13 @@ ImageView imageView;
 
 @BindView(R.id.textView)
 TextView textView;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    JInjector.bind(this);
+}
 ```
 ###### Kotlin代码
 ```
@@ -40,6 +47,9 @@ lateinit var imageView: ImageView
 
 @BindView(R.id.textView)
 lateinit var textView: TextView
+
+//别忘了bind额
+JInjector.bind(this);
 ```
 ##### 2.在library中绑定
 
